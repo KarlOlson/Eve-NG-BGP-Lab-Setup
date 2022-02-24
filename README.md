@@ -35,13 +35,14 @@ After Eve-ng is installed, you need to setup networking. You can follow [this gu
 * Determine what IP block you want to use for your lab gateway (can be anything). I am choosing `192.168.2.0/24` and the `pnet1` interface for this task.
 * Assign an ip to your bridged interface: `$ip address add 192.168.2.1/24 dev pnet1`
 * Make configuration survivable between reboots by modifying the `/etc/network/interfaces` file and configuring the pnet1 settings to the following:
-        ``` iface eth1 inet manual
-	  auto pnet1
-	  iface pnet1 inet static
-	  address 192.168.2.1
-	  netmask 255.255.255.0
-	  bridge_ports eth1
-	  bridge_stp off ``` 
+`iface eth1 inet manual
+ auto pnet1
+ iface pnet1 inet static
+ address 192.168.2.1
+ netmask 255.255.255.0
+ bridge_ports eth1
+ bridge_stp off `
+
 * Enable ip forwarding in the kernel to allow communication between guest and host:
 	`$echo 1 > /proc/sys/net/ipv4/ip_forward `
 * Make forwarding survivable between reboots by configuring `/etc/sysctl.conf` and removing the comment `#` before `net.ipv4.ip_forward=1`. 
