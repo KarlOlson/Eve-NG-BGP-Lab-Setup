@@ -41,9 +41,9 @@ After Eve-ng is installed, you need to setup networking. You can follow [this gu
 	address 192.168.2.1
 	netmask 255.255.255.0
 	bridge_ports eth1
-	bridge_stp off ```
+	bridge_stp off
 * Enable ip forwarding in the kernel to allow communication between guest and host:
-	`$echo 1 > /proc/sys/net/ipv4/ip_forward`
+	`$echo 1 > /proc/sys/net/ipv4/ip_forward `
 * Make forwarding survivable between reboots by configuring `/etc/sysctl.conf` and removing the comment `#` before `net.ipv4.ip_forward=1`. 
 * Configure address translation between `pnet1` subnet and VM (note `pnet0` is used as that is the dynamically configured 'Management' interface configured during Eve-NG setup as the default VM interface. You are just telling the VM to translate this new block into the auto-configured Eve-ng management interface here. Do not change to `pnet1` as it will result in no connectivity): `$iptables -t nat -A POSTROUTING -o pnet0 -s 192.168.2.0/24 -j MASQUERADE`
 * Make iptables rule survive restarts by installing iptables persistent module: `apt-get install iptables`
@@ -57,7 +57,7 @@ In this section we create a base FRR device in Eve-NG which can then be used to 
 * Eve relies on QEMU (Quick Emulation) to launch virtualized devices, therefore we need to implement a device via QEMU:
 * Move to the Eve-ng qemu directory and then create a new directory for our FRR device: 
 	```$cd /opt/unetlab/addons/qemu/
-	   $mkdir linux-frr-8.1 && cd ./linux-frr-8.1```
+	   $mkdir linux-frr-8.1 && cd ./linux-frr-8.1
 * Move our linux server iso to the cdrom device so we can boot: `$cp /root/ubuntu-20.04.3-live-server-amd64.iso cdrom.iso`
 * Create a new hard disk for our FRR device: `/opt/qemu/bin/qemu-img create -f qcow2 virtioa.qcow2 16G` (Note: if this is a new device, you would name the image `virtiob.qcow2`, etc. per QEMU naming conventions)
 
@@ -74,8 +74,8 @@ Log in to your Eve-ng webportal interface (`user: admin pass:whatever you set on
 * Continue through menu to `Profile Setup`. Create a profile for your frr system (do not select `FRR` as the user as it will break the configuration later). 
 * Select `Install OpenSSH server` and then `Done`. Let rest of install complete. Do NOT select `Cancel update and reboot`. Wait for installation to complete.
 * Once install is complete, go to your Eve-ng host and remove the `cdrom.iso` prior to rebooting FRR install: 
-	```$cd /opt/unetlab/addons/eqmu/linux-frr-8.1
-	   $rm -rf cdrom.iso`. Now you can reboot your Ubuntu Server.```
+	``` $cd /opt/unetlab/addons/eqmu/linux-frr-8.1
+	    $rm -rf cdrom.iso`. Now you can reboot your Ubuntu Server. ```
 
 # Ubuntu server upgrades and FRR install
 Update packages and prep linux server prior to installing FRR. You can optionally upgrade the kernel, but check on potential FRR conflicts first. Then upgrade your system:
