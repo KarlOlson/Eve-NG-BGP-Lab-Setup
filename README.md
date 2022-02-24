@@ -145,7 +145,7 @@ $/opt/qemu/bin/qemu-img commit virtioa.qcow2
 $/opt/unetlab/wrappers/unl_wrapper -a fixpermissions
 ``` 
 		
-## Device deployments in FRRVER
+## Device deployments in FRR
 We can now use our base FRR image we just created to launch multiple instances within eve-ng (eg. each device corresponding to a router, switch, etc.) To launch a device:
 * Select `+` to add new node, select `Linux` and then select our recently created image `linux-frr-8.1`
 * Select how many interface we need the device to have (we will do 3 for now). Click ok. You should now have two "Linux" nodes in your Eve-ng environment that correspond to FRR routers (you can rename them).
