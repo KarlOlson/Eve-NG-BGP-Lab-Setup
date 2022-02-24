@@ -85,10 +85,10 @@ Update packages and prep linux server prior to installing FRR. You can optionall
 	   sudo reboot```
 
 # Install FRR from Debian Repository
-	```$curl -s https://deb.frrouting.org/frr/keys.asc | sudo apt-key add - 
-	   $FRR="frr-stable"
-  	   $echo deb https://deb.frrouting.org/frr $(lsb_release -s -c) $FRRVER | sudo tee -a /etc/apt/sources.list.d/frr.list
- 	   $sudo apt update && sudo apt install frr frr-pythontools```
+	`$curl -s https://deb.frrouting.org/frr/keys.asc | sudo apt-key add - 
+	 $FRR="frr-stable"
+  	 $echo deb https://deb.frrouting.org/frr $(lsb_release -s -c) $FRRVER | sudo tee -a /etc/apt/sources.list.d/frr.list
+ 	 $sudo apt update && sudo apt install frr frr-pythontools`
 
 # Configure Base FRR settings
 The following are baseline configs that will apply to every FRR device you create in Eve-ng. 
@@ -102,12 +102,12 @@ The following are baseline configs that will apply to every FRR device you creat
 # Initial Router Configuration
 * Enter your router terminal: `$vtysh` (you should enter a command prompt similar to `Router#`)
 * Create device password: 
-	```Router# configure terminal
-	   Router(config)# password <something>
-	   Router(config)# enable password <something>
-	   Router(config)# exit
-	   Router# write memory
-	   Router# exit```
+	`Router# configure terminal
+	 Router(config)# password <something>
+	 Router(config)# enable password <something>
+	 Router(config)# exit
+	 Router# write memory
+	 Router# exit`
 
 # Finalize setup/final tasks
 * (optional) Allow telnet to router if you want to use a standard config tool like putty. Note: run this in your FRR (ubuntu server) instance, NOT ON THE EVE-NG Server:
@@ -116,8 +116,8 @@ The following are baseline configs that will apply to every FRR device you creat
 * Commit all these setup changes to finalize our QEMU image for repeat deployments:
 	* shutdown the FRR (ubuntu server) node: `$sudo shutdown -h now`
 	* On Eve-ng server, commit our changes to our image and modify permissions for repeat deployments:
-		```$/opt/qemu/bin/qemu-img commit virtioa.qcow2
-		   $/opt/unetlab/wrappers/unl_wrapper -a fixpermissions```
+	`$/opt/qemu/bin/qemu-img commit virtioa.qcow2
+	 $/opt/unetlab/wrappers/unl_wrapper -a fixpermissions`
 		
 # Device deployments in FRRVER
 We can now use our base FRR image we just created to launch multiple instances within eve-ng (eg. each device corresponding to a router, switch, etc.) To launch a device:
