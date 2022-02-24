@@ -10,8 +10,8 @@ Eve-ng requires nested virtualization in order to run a simulated network. This 
 * Settings->System->Processor->Enable Nested VT-X
 
 If you are using a Windows platform, this option may not be directly selectable, but can be configured from the Windows command line:
-* 'C:\>cd "Program Files\Oracle\VirtualBox"'
-* 'C:\Program Files\Oracle\VirtualBox>VBoxManage modifyvm [VMName] --nested-hw-virt on'
+* '''C:\>cd "Program Files\Oracle\VirtualBox"'''
+* '''C:\Program Files\Oracle\VirtualBox>VBoxManage modifyvm [VMName] --nested-hw-virt on'''
 
 # VBox Eve-NG Configuration
 * Create a new Vbox Machine: Tools->New
