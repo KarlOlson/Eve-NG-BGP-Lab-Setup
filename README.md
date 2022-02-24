@@ -146,3 +146,4 @@ We can now use our base FRR image we just created to launch multiple instances w
 * Drag a connection between your two routers and select which interface your want to use for connection. 
 * Add two VPCs using the same add node process. Connect these to your routers on a different interface.
 * Power on all systems and let them boot (may take a bit). At this point, everything is on, but nothing should have connectivity because we have not configured anything yet. We will need to create two subnets for our local 'Lan' network, and one for our router-router connection. You can select anything, but I followed the image below:
+![alt text](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/edit/main/Images/network.png "Testnet")
