@@ -157,5 +157,10 @@ We can now use our base FRR image we just created to launch multiple instances w
 * Note: to enter the router configuration command prompt type `$ vtysh` from your FRR host. This will enter the base FRR router configuration software. Follow image commands to setup a BGP routable network.
 * After saving your router configuration using `Router1# write memory` this will save your configuration file. However, if you shut off the lab, it does not automatically reload this file and you may notice that your config is lost on reboot. You can reload this configuration by typing `$ vtysh -b` to reload the config and then `$ vtysh` to enter the router config prompt with the pre-loaded configuration.
 
+## Eve-NG Wireshark Configuration
+You will need to cache the Eve-NG VM server credentials before being able to use Wireshark for packet capture in Eve. If you don't, you will get a "End of file on pipe magic during open" Error. To fix:
+* Open a Windows CMD Prompt and move to your EVE-NG directory: `C:\Program Files\EVE-NG\` It should have a 'plink.exe' file (if you installed the integration pack). 
+* run plink to generate a connection and cache the certificate: `C:\Program Files\EVE-NG\plink.exe root@<your EVE-VM IP>` Select `Yes` on if you want to cache the certificate locally. You can now try wireshark (right click a device in Eve and select `Capture`) and it should work.
+
 ## Known Bugs/Issues
 * See [Eve-ng Issues](https://github.com/SmartFinn/eve-ng-integration/blob/master/README.md) for common problems and fixes.
