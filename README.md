@@ -8,6 +8,7 @@ Then, download the Eve-ng [Community Edition ISO](https://www.eve-ng.net/index.p
 # Virtualbox Configuration
 Eve-ng requires nested virtualization in order to run a simulated network. This option is available under:
 * Settings->System->Processor->Enable Nested VT-X
+
 If you are using a Windows platform, this option may not be directly selectable, but can be configured from the command line:
 *C:\>cd "Program Files\Oracle\VirtualBox"
 *C:\Program Files\Oracle\VirtualBox>VBoxManage modifyvm [VMName] --nested-hw-virt on
