@@ -1,11 +1,17 @@
 # Overview
-This guide covers the basic Eve-ng emulation environment setup along with basic BGP routing lab. These instructions cover virtualbox configuration, though other methods/systems will work.
+This guide covers the basic Eve-ng emulation environment setup along with basic BGP routing lab. These instructions cover virtualbox configuration, though other methods/systems will work. There are two options: Easy (unverified) and Full Setup (step by step clean build). 
 
-# Preparation
+# Easy Setup
+* Download virtualbox disc image of pre-configured system and run. Everything should be setup per the final test lab (See bottom of this file).
+* Likely will need to configure network adapters still, but need to check on that.
+
+# Clean Install Setup
+
+## Preparation
 First, download and install the Eve-ng Windows [Client Integration Pack](https://www.eve-ng.net/index.php/download/).
 Then, download the Eve-ng [Community Edition ISO](https://www.eve-ng.net/index.php/download/)
 
-# Virtualbox Configuration
+## Virtualbox Configuration
 Eve-ng requires nested virtualization in order to run a simulated network. This option is available under:
 * Settings->System->Processor->Enable Nested VT-X
 
@@ -13,7 +19,7 @@ If you are using a Windows platform, this option may not be directly selectable,
 * `C:\>cd "Program Files\Oracle\VirtualBox"`
 * `C:\Program Files\Oracle\VirtualBox>VBoxManage modifyvm [VMName] --nested-hw-virt on`
 
-# VBox Eve-NG Configuration
+## VBox Eve-NG Configuration
 * Create a new Vbox Machine: Tools->New
 * Assign maximum amount of memory you can. Recommend at least 8GB.
 * Create a Virtual Hard Disk and select 50GB, recommend VHD for portability.
@@ -29,7 +35,7 @@ Once VM is initialized, go to settings and adjust the following:
 
 Then proceed to boot your VM and go through the Eve-ng installation/setup process.
 
-# EVE-ng Network Setup with Host
+## EVE-ng Network Setup with Host
 Eve-ng creates 10 bridged interfaces by default associated with the 10 cloud interfaces available within the Eve-ng environment (eg. pnet1=Cloud 1 Interface). However, they are not configured. This section provides the steps necessary to setup an internal lab IP space and bridge to the host PC.
 After Eve-ng is installed, you need to setup networking. You can follow [this guide](https://www.itnetworkeng.org/connect-nodes-inside-eve-ng-with-the-internet/) (with graphical aids) or just follow commands below.
 * Determine what IP block you want to use for your lab gateway (can be anything). I am choosing `192.168.2.0/24` and the `pnet1` interface for this task.
@@ -56,7 +62,7 @@ $netfilter-persistent save
 $netfilter-persistent reload
 ```
 
-# QEMU Device Setup for FRR install
+## QEMU Device Setup for FRR install
 In this section we create a base FRR device in Eve-NG which can then be used to simulate many routing devices. If you want to install other devices (firewall, proxy, etc.) you can follow this same approach. FRR will run on a base ubuntu server image. All of this setup will be done in the Eve-NG machine. Follow [this guide](https://www.2stacks.net/blog/getting-started-with-frr-on-eveng/) for included graphical aids or the commands below:
 * Download ubuntu server: `$wget http://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-live-server-amd64.iso`
 * Eve relies on QEMU (Quick Emulation) to launch virtualized devices, therefore we need to implement a device via QEMU:
@@ -68,7 +74,7 @@ $mkdir linux-frr-8.1 && cd ./linux-frr-8.1
 * Move our linux server iso to the cdrom device so we can boot: `$cp /root/ubuntu-20.04.3-live-server-amd64.iso cdrom.iso`
 * Create a new hard disk for our FRR device: `/opt/qemu/bin/qemu-img create -f qcow2 virtioa.qcow2 16G` (Note: if this is a new device, you would name the image `virtiob.qcow2`, etc. per QEMU naming conventions)
 
-# Create our new device in Eve-NG
+## Create our new device in Eve-NG
 Log in to your Eve-ng webportal interface (`user: admin pass:whatever you set on install`) (There should have been an IP displayed when booting, you will use that. Mine was `192.168.160.217`.) We will now create a new device which will be our FRR router:
 * Create a new lab by clicking on the `File` icon and give it a name
 * In the lab environment click the `+` and add a new node.
@@ -87,7 +93,7 @@ $rm -rf cdrom.iso
 ```
 * Now you can reboot your Ubuntu Server.
 
-# Ubuntu server upgrades and FRR install
+## Ubuntu server upgrades and FRR install
 Update packages and prep linux server prior to installing FRR. You can optionally upgrade the kernel, but check on potential FRR conflicts first. Then upgrade your system:
 * (Optional) `sudo apt-get install --install-recommends linux-generic-hwe-20.04`
 ```
@@ -104,7 +110,7 @@ $echo deb https://deb.frrouting.org/frr $(lsb_release -s -c) $FRRVER | sudo tee 
 $sudo apt update && sudo apt install frr frr-pythontools ` 
 ```
 
-# Configure Base FRR settings
+## Configure Base FRR settings
 The following are baseline configs that will apply to every FRR device you create in Eve-ng. 
 * Allow access to FRR vtysh configuration utility: `$sudo usermod -a -G frr,frrvty <your Linux Server Username>`
 * Enable routing daemons (note, only select the ones you plan to use to limit resource usage. You can edit this later if need be. Here I am just booting the BGP daemon). To launch a daemon, go to `/etc/frr/daemons` file and then change the state from `no` to `yes` for the daemon you want to enable.
@@ -113,7 +119,7 @@ The following are baseline configs that will apply to every FRR device you creat
 * Enable kernel forwarding by editing the `/etc/sysctl.conf` file and uncommenting the `net.ipv4.ip_forward=1` line (do same for ipv6 if you plan to use).
 * Note: in earlier versions there was a bug where this kernel edit wouldn't hold in 18.x versions of Ubuntu Server.  I didn't have this issue in 20.x and ignored the workaround suggested.
 
-# Initial Router Configuration
+## Initial Router Configuration
 * Enter your router terminal: `$vtysh` (you should enter a command prompt similar to `Router#`)
 * Create device password: 
 ```
@@ -125,7 +131,7 @@ Router# write memory
 Router# exit
 ``` 
 
-# Finalize setup/final tasks
+## Finalize setup/final tasks
 * (optional) Allow telnet to router if you want to use a standard config tool like putty. Note: run this in your FRR (ubuntu server) instance, NOT ON THE EVE-NG Server:
 ```
 sudo sed -i 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="console=tty"/' /etc/default/grub
@@ -139,7 +145,7 @@ $/opt/qemu/bin/qemu-img commit virtioa.qcow2
 $/opt/unetlab/wrappers/unl_wrapper -a fixpermissions
 ``` 
 		
-# Device deployments in FRRVER
+## Device deployments in FRRVER
 We can now use our base FRR image we just created to launch multiple instances within eve-ng (eg. each device corresponding to a router, switch, etc.) To launch a device:
 * Select `+` to add new node, select `Linux` and then select our recently created image `linux-frr-8.1`
 * Select how many interface we need the device to have (we will do 3 for now). Click ok. You should now have two "Linux" nodes in your Eve-ng environment that correspond to FRR routers (you can rename them).
