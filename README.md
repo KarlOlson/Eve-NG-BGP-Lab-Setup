@@ -48,8 +48,8 @@ After Eve-ng is installed, you need to setup networking. You can follow [this gu
 * Configure address translation between `pnet1` subnet and VM (note `pnet0` is used as that is the dynamically configured 'Management' interface configured during Eve-NG setup as the default VM interface. You are just telling the VM to translate this new block into the auto-configured Eve-ng management interface here. Do not change to `pnet1` as it will result in no connectivity): `$iptables -t nat -A POSTROUTING -o pnet0 -s 192.168.2.0/24 -j MASQUERADE`
 * Make iptables rule survive restarts by installing iptables persistent module: `apt-get install iptables`
 * Save current iptables configuration via netfilter-persistent:
-	```$netfilter-persistent save
-	$netfilter-persistent reload```
+	` $netfilter-persistent save
+	  $netfilter-persistent reload `
 
 # QEMU Device Setup for FRR install
 In this section we create a base FRR device in Eve-NG which can then be used to simulate many routing devices. If you want to install other devices (firewall, proxy, etc.) you can follow this same approach. FRR will run on a base ubuntu server image. All of this setup will be done in the Eve-NG machine. Follow [this guide](https://www.2stacks.net/blog/getting-started-with-frr-on-eveng/) for included graphical aids or the commands below:
@@ -102,12 +102,12 @@ The following are baseline configs that will apply to every FRR device you creat
 # Initial Router Configuration
 * Enter your router terminal: `$vtysh` (you should enter a command prompt similar to `Router#`)
 * Create device password: 
-	`Router# configure terminal
-	 Router(config)# password <something>
-	 Router(config)# enable password <something>
-	 Router(config)# exit
-	 Router# write memory
-	 Router# exit`
+	` Router# configure terminal
+	  Router(config)# password <something>
+	  Router(config)# enable password <something>
+	  Router(config)# exit
+	  Router# write memory
+	  Router# exit `
 
 # Finalize setup/final tasks
 * (optional) Allow telnet to router if you want to use a standard config tool like putty. Note: run this in your FRR (ubuntu server) instance, NOT ON THE EVE-NG Server:
