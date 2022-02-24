@@ -13,35 +13,36 @@ If you are using a Windows platform, this option may not be directly selectable,
 * C:\>cd "Program Files\Oracle\VirtualBox"
 * C:\Program Files\Oracle\VirtualBox>VBoxManage modifyvm [VMName] --nested-hw-virt on
 
-#VBox Eve-NG Configuration
-*Create a new Vbox Machine: Tools->New
-*Assign maximum amount of memory you can. Recommend at least 8GB.
-*Create a Virtual Hard Disk and select 50GB, recommend VHD for portability.
+# VBox Eve-NG Configuration
+* Create a new Vbox Machine: Tools->New
+* Assign maximum amount of memory you can. Recommend at least 8GB.
+* Create a Virtual Hard Disk and select 50GB, recommend VHD for portability.
+
 Once VM is initialized, go to settings and adjust the following:
-*System->Motherboard->uncheck floppy
-*Processor-> Minimum of 2, but more the better
-*Processor-> Ensure checks for "Enable PAE/NX and Nested VT-x are checked. If not, check them (see above on Windows nested virtualization).
-*Storage->click CD graphic and select Eve-NG ISO
-*Audio->Disable, not needed
-*Network->Select Bridged adapter and enable Promiscuous mode. Only one interface is needed for Eve, but can add more if desired.
-*USB->Disable, not needed.
+* System->Motherboard->uncheck floppy
+* Processor-> Minimum of 2, but more the better
+* Processor-> Ensure checks for "Enable PAE/NX and Nested VT-x are checked. If not, check them (see above on Windows nested virtualization).
+* Storage->click CD graphic and select Eve-NG ISO
+* Audio->Disable, not needed
+* Network->Select Bridged adapter and enable Promiscuous mode. Only one interface is needed for Eve, but can add more if desired.
+* USB->Disable, not needed.
 
 Then proceed to boot your VM and go through the Eve-ng installation/setup process.
 
-#EVE-ng Network Setup with Host
+# EVE-ng Network Setup with Host
 Eve-ng creates 10 bridged interfaces by default associated with the 10 cloud interfaces available within the Eve-ng environment (eg. pnet1=Cloud 1 Interface). However, they are not configured. This section provides the steps necessary to setup an internal lab IP space and bridge to the host PC.
 After Eve-ng is installed, you need to setup networking. You can follow [this guide](https://www.itnetworkeng.org/connect-nodes-inside-eve-ng-with-the-internet/) (with graphical aids) or just follow commands below.
-*Determine what IP block you want to use for your lab gateway (can be anything). I am choosing 192.168.2.0/24 for this task.
-*Assign the ip to your bridged interface: $ip address add 192.168.2.1/24 dev pnet1
-*Make configuration survivable between reboots by modifying the /etc/network/interfaces file and configuring the pnet1 settings to the following:
-	iface eth1 inet manual
-	auto pnet1
-	iface pnet1 inet static
+* Determine what IP block you want to use for your lab gateway (can be anything). I am choosing 192.168.2.0/24 for this task.
+* Assign the ip to your bridged interface: $ip address add 192.168.2.1/24 dev pnet1
+* Make configuration survivable between reboots by modifying the /etc/network/interfaces file and configuring the pnet1 settings to the following:
+	* iface eth1 inet manual
+	* auto pnet1
+	* iface pnet1 inet static
 	address 192.168.2.1
 	netmask 255.255.255.0
 	bridge_ports eth1
 	bridge_stp off
-*Enable ip forwarding in the kernel to allow communication between guest and host:
+* Enable ip forwarding in the kernel to allow communication between guest and host:
 	echo 1 > /proc/sys/net/ipv4/ip_forward
 *Make forwarding survivable between reboots by configuring /etc/sysctl.conf and removing the comment '#' before net.ipv4.ip_forward=1. 
 *Configure address translation between pnet1 subnet and VM (note pnet0 is used as that is the dynamically configured 'Management' interface. You are just telling the VM to translate this new block into the auto-configured Eve-ng management interface here. Do not change to pnet1): $iptables -t nat -A POSTROUTING -o pnet0 -s 192.168.2.0/24 -j MASQUERADE
