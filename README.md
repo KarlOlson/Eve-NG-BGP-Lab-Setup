@@ -96,7 +96,7 @@ sudo apt-get dist-upgrade
 sudo reboot 
 ``` 
 
-# Install FRR from Debian Repository
+Once rebooted, then proceed to install FRR from Debian Repository:
 ```
 $curl -s https://deb.frrouting.org/frr/keys.asc | sudo apt-key add - 
 $FRR="frr-stable"
