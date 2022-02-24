@@ -35,29 +35,29 @@ After Eve-ng is installed, you need to setup networking. You can follow [this gu
 * Determine what IP block you want to use for your lab gateway (can be anything). I am choosing `192.168.2.0/24` and the `pnet1` interface for this task.
 * Assign an ip to your bridged interface: `$ip address add 192.168.2.1/24 dev pnet1`
 * Make configuration survivable between reboots by modifying the `/etc/network/interfaces` file and configuring the pnet1 settings to the following:
-      ``` iface eth1 inet manual
+        ` iface eth1 inet manual
 	  auto pnet1
 	  iface pnet1 inet static
 	  address 192.168.2.1
 	  netmask 255.255.255.0
 	  bridge_ports eth1
-	  bridge_stp off ```
+	  bridge_stp off ` 
 * Enable ip forwarding in the kernel to allow communication between guest and host:
 	`$echo 1 > /proc/sys/net/ipv4/ip_forward `
 * Make forwarding survivable between reboots by configuring `/etc/sysctl.conf` and removing the comment `#` before `net.ipv4.ip_forward=1`. 
 * Configure address translation between `pnet1` subnet and VM (note `pnet0` is used as that is the dynamically configured 'Management' interface configured during Eve-NG setup as the default VM interface. You are just telling the VM to translate this new block into the auto-configured Eve-ng management interface here. Do not change to `pnet1` as it will result in no connectivity): `$iptables -t nat -A POSTROUTING -o pnet0 -s 192.168.2.0/24 -j MASQUERADE`
 * Make iptables rule survive restarts by installing iptables persistent module: `apt-get install iptables`
 * Save current iptables configuration via netfilter-persistent:
-	``` $netfilter-persistent save
-	    $netfilter-persistent reload ```
+	 ` $netfilter-persistent save
+	    $netfilter-persistent reload ` 
 
 # QEMU Device Setup for FRR install
 In this section we create a base FRR device in Eve-NG which can then be used to simulate many routing devices. If you want to install other devices (firewall, proxy, etc.) you can follow this same approach. FRR will run on a base ubuntu server image. All of this setup will be done in the Eve-NG machine. Follow [this guide](https://www.2stacks.net/blog/getting-started-with-frr-on-eveng/) for included graphical aids or the commands below:
 * Download ubuntu server: `$wget http://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-live-server-amd64.iso`
 * Eve relies on QEMU (Quick Emulation) to launch virtualized devices, therefore we need to implement a device via QEMU:
 * Move to the Eve-ng qemu directory and then create a new directory for our FRR device: 
-	 ``` $cd /opt/unetlab/addons/qemu/
-	     $mkdir linux-frr-8.1 && cd ./linux-frr-8.1 ```
+	  ` $cd /opt/unetlab/addons/qemu/
+	     $mkdir linux-frr-8.1 && cd ./linux-frr-8.1 ` 
 * Move our linux server iso to the cdrom device so we can boot: `$cp /root/ubuntu-20.04.3-live-server-amd64.iso cdrom.iso`
 * Create a new hard disk for our FRR device: `/opt/qemu/bin/qemu-img create -f qcow2 virtioa.qcow2 16G` (Note: if this is a new device, you would name the image `virtiob.qcow2`, etc. per QEMU naming conventions)
 
@@ -74,22 +74,22 @@ Log in to your Eve-ng webportal interface (`user: admin pass:whatever you set on
 * Continue through menu to `Profile Setup`. Create a profile for your frr system (do not select `FRR` as the user as it will break the configuration later). 
 * Select `Install OpenSSH server` and then `Done`. Let rest of install complete. Do NOT select `Cancel update and reboot`. Wait for installation to complete.
 * Once install is complete, go to your Eve-ng host and remove the `cdrom.iso` prior to rebooting FRR install: 
-	``` $cd /opt/unetlab/addons/eqmu/linux-frr-8.1
-	    $rm -rf cdrom.iso ```
+	 ` $cd /opt/unetlab/addons/eqmu/linux-frr-8.1
+	    $rm -rf cdrom.iso ` 
 * Now you can reboot your Ubuntu Server.
 
 # Ubuntu server upgrades and FRR install
 Update packages and prep linux server prior to installing FRR. You can optionally upgrade the kernel, but check on potential FRR conflicts first. Then upgrade your system:
 * (Optional) `sudo apt-get install --install-recommends linux-generic-hwe-20.04`
-	  ```sudo apt-get update
+	   `sudo apt-get update
 	     sudo apt-get dist-upgrade
-	     sudo reboot ```
+	     sudo reboot ` 
 
 # Install FRR from Debian Repository
-	``` $curl -s https://deb.frrouting.org/frr/keys.asc | sudo apt-key add - 
+	 ` $curl -s https://deb.frrouting.org/frr/keys.asc | sudo apt-key add - 
 	    $FRR="frr-stable"
   	    $echo deb https://deb.frrouting.org/frr $(lsb_release -s -c) $FRRVER | sudo tee -a /etc/apt/sources.list.d/frr.list
- 	    $sudo apt update && sudo apt install frr frr-pythontools ```
+ 	    $sudo apt update && sudo apt install frr frr-pythontools ` 
 
 # Configure Base FRR settings
 The following are baseline configs that will apply to every FRR device you create in Eve-ng. 
@@ -103,22 +103,22 @@ The following are baseline configs that will apply to every FRR device you creat
 # Initial Router Configuration
 * Enter your router terminal: `$vtysh` (you should enter a command prompt similar to `Router#`)
 * Create device password: 
-	``` Router# configure terminal
+	 ` Router# configure terminal
 	    Router(config)# password <something>
 	    Router(config)# enable password <something>
 	    Router(config)# exit
 	    Router# write memory
-	    Router# exit ```
+	    Router# exit ` 
 
 # Finalize setup/final tasks
 * (optional) Allow telnet to router if you want to use a standard config tool like putty. Note: run this in your FRR (ubuntu server) instance, NOT ON THE EVE-NG Server:
-	```sudo sed -i 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="console=tty"/' /etc/default/grub
-	   sudo update-grub ```
+	 `sudo sed -i 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="console=tty"/' /etc/default/grub
+	   sudo update-grub ` 
 * Commit all these setup changes to finalize our QEMU image for repeat deployments:
 	* shutdown the FRR (ubuntu server) node: `$sudo shutdown -h now`
 	* On Eve-ng server, commit our changes to our image and modify permissions for repeat deployments:
-	``` $/opt/qemu/bin/qemu-img commit virtioa.qcow2
-	    $/opt/unetlab/wrappers/unl_wrapper -a fixpermissions ```
+	 ` $/opt/qemu/bin/qemu-img commit virtioa.qcow2
+	    $/opt/unetlab/wrappers/unl_wrapper -a fixpermissions ` 
 		
 # Device deployments in FRRVER
 We can now use our base FRR image we just created to launch multiple instances within eve-ng (eg. each device corresponding to a router, switch, etc.) To launch a device:
