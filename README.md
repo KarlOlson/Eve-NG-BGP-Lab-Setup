@@ -1,5 +1,6 @@
 # Overview
-This guide covers the basic Eve-ng emulation environment setup along with basic BGP routing lab. These instructions cover virtualbox configuration, though other methods/systems will work. There are two options: Easy (unverified) and Full Setup (step by step clean build). 
+This guide covers the basic Eve-ng emulation environment setup along with basic BGP routing lab. These instructions cover virtualbox configuration, though other methods/systems will work. There are two options: Easy (unverified) and Full Setup (step by step clean build). Reference the FRR Manual as needed (helpful for router commands/verification): [FRR Documentation](FRR:
+http://docs.frrouting.org/en/latest/setup.html#basic-setup)
 
 # Easy Setup
 * Download virtualbox disc image of pre-configured system and run. Everything should be setup per the final test lab (See bottom of this file).
