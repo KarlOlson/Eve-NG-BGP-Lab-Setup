@@ -162,5 +162,40 @@ You will need to cache the Eve-NG VM server credentials before being able to use
 * Open a Windows CMD Prompt and move to your EVE-NG directory: `C:\Program Files\EVE-NG\` It should have a 'plink.exe' file (if you installed the integration pack). 
 * run plink to generate a connection and cache the certificate: `C:\Program Files\EVE-NG\plink.exe root@<your EVE-VM IP>` Select `Yes` on if you want to cache the certificate locally. You can now try wireshark (right click a device in Eve and select `Capture`) and it should work.
 
+## In-line Proxy Setup
+The proxies are configured with a L2 Bridged interface between two Ethernet ports to pass traffic transparantly. I had looked at other solutions, but this seems to be the best workable placeholder. In bridged mode you can monitor the traffic passing through via the `br0` interface and hopefully use that as a tapped interface in the future (need to look into how linux uses bridge interfaces). 
+
+To configure the proxy bridge interfaces, use the `/etc/netplan/00-installer-config.yaml`  configuration file to set the network interface configuration with a bridged interface between the ethernet ports:
+```
+netowkr:
+  ethernets:
+    ens3:
+      dhcp4: no
+    ens4: 
+      dhcp4: no
+    ens5:
+      addresses: [192.168.1.1/24]
+      gateway4: 192.168.1.2
+  bridges:
+    br0:
+      interfaces:
+        - ens3
+	- ens4
+version: 2
+```
+* Note: the ens5 configuration is to tie into the cloud/public network per the earlier Eve-ng setup. Only required if you need this device to have internet (for updates, etc.)
+* Repeat process for second proxy.
+
+## Deploying Ethereum Chain and Nodes:
+This section covers the deployment of the ethereum blockchain, initial genesis launch, and interacting with the chain in the lab via the two nodes (the previously configured proxies)
+
+*TBD
+
+## Launching Lab
+* Highlight all devices and click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
+* for VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load.
+* for the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. After that you can join the router command prompt by using `$ vtysh` to make any changes.
+* The proxies are configured with `br0` interface and will operate without any involvement.
+
 ## Known Bugs/Issues
 * See [Eve-ng Issues](https://github.com/SmartFinn/eve-ng-integration/blob/master/README.md) for common problems and fixes.
