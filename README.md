@@ -196,6 +196,7 @@ This section covers the deployment of the ethereum blockchain, initial genesis l
 * for VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load.
 * for the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. After that you can join the router command prompt by using `$ vtysh` to make any changes.
 * The proxies are configured with `br0` interface and will operate without any involvement.
+* You can check interface configurations with `ip a` command in the linux box or a `sh interface brief` or a shorthand `sh int b` in FRR router config mode.
 
 ## Known Bugs/Issues
 * See [Eve-ng Issues](https://github.com/SmartFinn/eve-ng-integration/blob/master/README.md) for common problems and fixes.
