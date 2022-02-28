@@ -3,7 +3,7 @@ This guide covers the basic Eve-ng emulation environment setup along with basic 
 
 # Easy Setup
 * Download virtualbox disc image of pre-configured system and run [here](https://drive.google.com/drive/folders/11-vyLXQAHN4MR3sSGhR8YtLL00JavkBu?usp=sharing). Everything should be setup per the final test lab (See graphic towards the end of this file).
-* Take a look at the [Launching Lab](hhttps://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab) section for a few small efforts to load configs and various devices.
+* Take a look at the [Launching Lab](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab) section for a few small efforts to load configs and various devices.
 * Note: This image does not have the Blockchain functioning yet, but everything else should run and operate.
 
 * Login info:
