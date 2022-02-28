@@ -2,8 +2,9 @@
 This guide covers the basic Eve-ng emulation environment setup along with basic BGP routing lab. These instructions cover virtualbox configuration, though other methods/systems will work. There are two options: Easy (unverified) and Full Setup (step by step clean build). Reference the FRR Manual as needed (helpful for router commands/verification):  [FRR Documentation](http://docs.frrouting.org/en/latest/setup.html#basic-setup)
 
 # Easy Setup
-* Download virtualbox disc image of pre-configured system and run. Everything should be setup per the final test lab (See bottom of this file).
-* Likely will need to configure network adapters still, but need to check on that.
+* Download virtualbox disc image of pre-configured system and run. Everything should be setup per the final test lab (See graphic towards the end of this file).
+* Take a look at the 'Launching Lab' section for a few small efforts to load configs and various devices.
+* Note: This image does not have the Blockchain functioning yet, but everything else should run and operate.
 
 # Clean Install Setup
 
@@ -193,10 +194,11 @@ This section covers the deployment of the ethereum blockchain, initial genesis l
 
 ## Launching Lab
 * Highlight all devices and click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
-* for VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load.
-* for the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. After that you can join the router command prompt by using `$ vtysh` to make any changes.
-* The proxies are configured with `br0` interface and will operate without any involvement.
+* For VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load with the configured IP and gateway for each device.
+* For the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. This will also automatically enable the routing and anything else in the configuration file. After that you can join the router command prompt by using `$ vtysh` to make any changes.
+* The proxies are configured with `br0` interface and will operate without any involvement. All interfaces will load their `netplan` configuration for all interfaces.
 * You can check interface configurations with `ip a` command in the linux box or a `sh interface brief` or a shorthand `sh int b` in FRR router config mode.
+* Occasionally a device might hang on bootup. Just right click that device in Eve, select `stop` and then `start` to reload.
 
 ## Known Bugs/Issues
 * See [Eve-ng Issues](https://github.com/SmartFinn/eve-ng-integration/blob/master/README.md) for common problems and fixes.
