@@ -6,6 +6,10 @@ This guide covers the basic Eve-ng emulation environment setup along with basic 
 * Take a look at the 'Launching Lab' section for a few small efforts to load configs and various devices.
 * Note: This image does not have the Blockchain functioning yet, but everything else should run and operate.
 
+* Login info:
+   * For Eve-ng VM: User: `root` Pass: `eve` and the web front-end: User: `admin` Pass: `eve`
+   * For all devices in Eve: User: `user` Pass: `eve`
+
 # Clean Install Setup
 
 ## Preparation
