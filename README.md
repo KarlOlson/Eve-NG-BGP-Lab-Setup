@@ -2,8 +2,8 @@
 This guide covers the basic Eve-ng emulation environment setup along with basic BGP routing lab. These instructions cover virtualbox configuration, though other methods/systems will work. There are two options: Easy (unverified) and Full Setup (step by step clean build). Reference the FRR Manual as needed (helpful for router commands/verification):  [FRR Documentation](http://docs.frrouting.org/en/latest/setup.html#basic-setup)
 
 # Easy Setup
-* Download virtualbox disc image of pre-configured system and run. Everything should be setup per the final test lab (See graphic towards the end of this file).
-* Take a look at the 'Launching Lab' section for a few small efforts to load configs and various devices.
+* Download virtualbox disc image of pre-configured system and run [here](https://drive.google.com/drive/folders/11-vyLXQAHN4MR3sSGhR8YtLL00JavkBu?usp=sharing). Everything should be setup per the final test lab (See graphic towards the end of this file).
+* Take a look at the [Launching Lab](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/edit/main/README#L199) section for a few small efforts to load configs and various devices.
 * Note: This image does not have the Blockchain functioning yet, but everything else should run and operate.
 
 * Login info:
