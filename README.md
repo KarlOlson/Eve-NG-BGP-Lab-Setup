@@ -167,7 +167,7 @@ The proxies are configured with a L2 Bridged interface between two Ethernet port
 
 To configure the proxy bridge interfaces, use the `/etc/netplan/00-installer-config.yaml`  configuration file to set the network interface configuration with a bridged interface between the ethernet ports:
 ```
-netowkr:
+network:
   ethernets:
     ens3:
       dhcp4: no
