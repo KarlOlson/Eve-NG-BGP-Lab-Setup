@@ -201,7 +201,7 @@ This section covers the deployment of the ethereum blockchain, initial genesis l
 *TBD
 
 ## Launching Lab
-![alt text](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/Images/eve-ng.png "Testnet")
+![alt text](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/Images/eve-lab.png "Testnet")
 * Highlight all devices and click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
 * For VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load with the configured IP and gateway for each device.
 * For the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. This will also automatically enable the routing and anything else in the configuration file. After that you can join the router command prompt by using `$ vtysh` to make any changes.
