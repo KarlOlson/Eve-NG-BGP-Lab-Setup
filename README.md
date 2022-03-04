@@ -184,7 +184,19 @@ network:
       dhcp4: no
     ens5:
       addresses: [192.168.1.1/24]
-      gateway4: 192.168.1.2
+      routes:
+        - to: 192.168.1.0/24
+	  via: 192.168.1.2
+	  on-link: true
+    ens6:
+      addresses: [192.168.2.6/24]
+      nameservers: 
+        addresses: 
+	  - 8.8.8.8
+      routes:
+        - to: default
+	  via: 192.168.2.1
+	  on-link: true
   bridges:
     br0:
       interfaces:
@@ -192,7 +204,7 @@ network:
 	- ens4
 version: 2
 ```
-* Note: the ens5 configuration is to tie into the cloud/public network per the earlier Eve-ng setup. Only required if you need this device to have internet (for updates, etc.)
+* Note: the ens5 configuration is to tie into the cloud/public network per the earlier Eve-ng setup. Only required if you need this device to have internet (for updates, etc.). The route statement is used to define which interface should be selected for which route. Having multiple gateways can cause issues if using the `gateway4: <IP.` statement. Similar process is configured on Proxy 2 and the Blockchain server.
 * Repeat process for second proxy.
 
 ## Deploying Ethereum Chain and Nodes:
@@ -201,10 +213,11 @@ This section covers the deployment of the ethereum blockchain, initial genesis l
 *TBD
 
 ## Launching Lab
+After loading Eve, you should get a network as shown below:
 <p align="center">
   <img width="400" src="https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/Images/eve-lab.png" alt="Testnet">
 </p>
-* Highlight all devices and click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
+* Highlight all devices, right click, and then click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
 * For VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load with the configured IP and gateway for each device.
 * For the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. This will also automatically enable the routing and anything else in the configuration file. After that you can join the router command prompt by using `$ vtysh` to make any changes.
 * The proxies are configured with `br0` interface and will operate without any involvement. All interfaces will load their `netplan` configuration for all interfaces.
