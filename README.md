@@ -202,7 +202,7 @@ This section covers the deployment of the ethereum blockchain, initial genesis l
 
 ## Launching Lab
 <p align="center">
-  <img width="200" src="https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/Images/eve-lab.png" alt="Testnet">
+  <img width="400" src="https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/Images/eve-lab.png" alt="Testnet">
 </p>
 * Highlight all devices and click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
 * For VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load with the configured IP and gateway for each device.
