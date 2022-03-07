@@ -81,7 +81,7 @@ $cd /opt/unetlab/addons/qemu/
 $mkdir linux-frr-8.1 && cd ./linux-frr-8.1
 ``` 
 * Move our linux server iso to the cdrom device so we can boot: `$cp /root/ubuntu-20.04.3-live-server-amd64.iso cdrom.iso`
-* Create a new hard disk for our FRR device: `/opt/qemu/bin/qemu-img create -f qcow2 virtioa.qcow2 16G` (Note: if this is a new device, you would name the image `virtiob.qcow2`, etc. per QEMU naming conventions)
+* Create a new hard disk for our FRR device: `/opt/qemu/bin/qemu-img create -f qcow2 virtioa.qcow2 16G` (Note: if this is a new device, you would name the image `virtiob.qcow2`, etc. per [QEMU HDD naming conventions](https://www.eve-ng.net/index.php/documentation/qemu-image-namings/).
 
 ## Create our new device in Eve-NG
 Log in to your Eve-ng webportal interface (`user: admin pass:whatever you set on install`) (There should have been an IP displayed when booting, you will use that. Mine was `192.168.160.217`.) We will now create a new device which will be our FRR router:
