@@ -7,13 +7,11 @@ Greg's blockchain efforts: [here](https://github.com/gregcusack/eth-blockchain-d
 
 # Easy Setup
 * Download virtualbox disc image of pre-configured system and run [here](https://drive.google.com/drive/folders/11-vyLXQAHN4MR3sSGhR8YtLL00JavkBu?usp=sharing) (final image avail 3/14). Everything should be setup per the final test lab (See graphic towards the end of this file).
-* Explanation of setup tasks can be found at [Launching Lab](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab). Short command task reference below to load configs and have everything working. Enter just after login.
+* Explanation of setup tasks can be found at [Launching Lab](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab). Short command task reference below to load configs and have everything working. Enter these just after loggin in to each box.
   * BGP_AS_50/100 Boxes: Enter `$ vtysh -b`
   * VPC Boxes: Enter `>> load config`
   * Blockchain Box: Enter `$ ganache`
   * Proxy Boxes: Enter `$ venv/bin/activate`
-
-* Simplified commands for setup (see full description [here] (https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab)
 
 * Login info:
    * For Eve-ng VM: User: `root` Pass: `eve` and the web front-end: User: `admin` Pass: `eve`
