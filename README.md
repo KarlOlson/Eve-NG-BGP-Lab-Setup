@@ -6,9 +6,14 @@ Evan's scalability efforts: [here](https://github.com/ejbraun/cloudlab_seed_emul
 Greg's blockchain efforts: [here](https://github.com/gregcusack/eth-blockchain-dev) and [here](https://github.com/gregcusack/blockchain)
 
 # Easy Setup
-* Download virtualbox disc image of pre-configured system and run [here](https://drive.google.com/drive/folders/11-vyLXQAHN4MR3sSGhR8YtLL00JavkBu?usp=sharing) (avail 3/1). Everything should be setup per the final test lab (See graphic towards the end of this file).
-* Take a look at the [Launching Lab](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab) section for a few small efforts to load configs and various devices.
-* Note: This image does not have the Blockchain functioning yet, but everything else should run and operate.
+* Download virtualbox disc image of pre-configured system and run [here](https://drive.google.com/drive/folders/11-vyLXQAHN4MR3sSGhR8YtLL00JavkBu?usp=sharing) (final image avail 3/14). Everything should be setup per the final test lab (See graphic towards the end of this file).
+* Explanation of setup tasks can be found at [Launching Lab](https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab). Short command task reference below to load configs and have everything working. Enter just after login.
+  * BGP_AS_50/100 Boxes: Enter `$ vtysh -b`
+  * VPC Boxes: Enter `>> load config`
+  * Blockchain Box: Enter `$ ganache`
+  * Proxy Boxes: Enter `$ venv/bin/activate`
+
+* Simplified commands for setup (see full description [here] (https://github.com/KarlOlson/Eve-NG-BGP-Lab-Setup/blob/main/README.md#launching-lab)
 
 * Login info:
    * For Eve-ng VM: User: `root` Pass: `eve` and the web front-end: User: `admin` Pass: `eve`
@@ -208,9 +213,56 @@ version: 2
 * Repeat process for second proxy.
 
 ## Deploying Ethereum Chain and Nodes:
-This section covers the deployment of the ethereum blockchain, initial genesis launch, and interacting with the chain in the lab via the two nodes (the previously configured proxies)
+This section covers the deployment of the ethereum local test blockchain via Ganache on the Blockchain server and configuration of Brownie on the Proxies. Ganache is a local testnet chain based on Ethereum for easy testing/deployment validation. It comes pre-initialized with a number of accounts, ether, etc. Actions on the chain can be played forward AND backward in time to aid troubleshooting. Brownie is a python based contract building platform for Ethereum.
 
-*TBD
+* Install Ganache on Blockchain server:
+  ```
+  sudo apt-get update
+  sudo apt-get install npm build-essentials python3.8-dev python3-pip
+  sudo npm install -g ganache
+  sudo npm install -g npm@8.5.3
+  ```
+* Install Python virtual environment on Proxy 1 and 2:
+  ```
+  sudo apt install python3.8-dev build-essential libnetfilter-queue-dev python3.8-venv
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  nvm install v16.14.0
+  nvm use v16.14.0
+  ```
+* Setup Python Virtual Environment:
+  ```
+  python3.8 -m venv venv/
+  source venv/bin/activate
+  ```
+* Upgrade environment pip package and install dependencies:
+  ```
+  python3 -m pip install --upgrade pip
+  python -m pip install Web3 eth-brownie Flask scapy NetfilterQueue flask-restful
+  ```
+* Configure `/.bashrc'` to use `psudo` as `sudo` in the virtual environment (to prevet conflicts). While we are at it, adjust the bash environment to change color of directories for easier reading. Apply both at end of `/.bashrc` file:
+  ```
+  psudo() { sudo env PATH="$PATH" "$@"; }
+  LS_COLORS=$LS_COLORS:'di=0;35:' ; export LS_COLORS
+  ```
+* Configure Brownie to use remote Ganache chain on blockchain server (Note: you should be in the python virtual environment when doing this, if you are not, just run `source venv/bin/activate` to start. This would mostly apply after a reboot. Note: there are different configs per box as we are just setup with a point-to-point link for our lab to connect these boxes together rather than routing infrastructure:
+  * For proxy 1: `(venv)$ brownie networks modify host='https://192.168.1.2' port='8545'
+  * For proxy 2: `(venv)$ brownie networks modify host='https://192.168.3.2' port='8545'
+ * You should now be able to test your Brownie connectivity to the remote ganache blockchain:
+   * `brownie console` should bring up a console (marked by `>>` prompt) that is connected to the remote blockchain. Do a check and see if you can read accounts by typing `accounts`. This should return the Ganache accounts.
+
+* Setup `iptables` and `Netfilter` to capture and report packets traversing the proxy for processing. Note: here `<server-ip>` is the target BGP AS as a packet first traverses the proxy. So for Proxy 1, you would use `192.168.5.1` and for proxy 2 you would use `192.168.5.2` with both being the bgp port `179`. Since iptables does not persist through reboots, install the persistance module and save the configuration to survive reboots:
+
+  * On proxy 1: `sudo iptables -I INPUT -p tcp -d 192.168.5.1 --dport 179 -j NFQUEUE --queue-num 1`
+  * On proxy 2: `sudo iptables -I INPUT -p tcp -d 192.168.5.2 --dport 179 -j NFQUEUE --queue-num 1`
+  * On Both:
+  ```
+  sudo apt-get install iptables-persistent
+  sudo netfilter-persistent save
+  ```
+  
+* Clone Greg's repo of various python efforts (note: not required here and will be repeated in seperate operation readme...but I included in the base and so will include here on the lab setup instructions
+  *  `git clone https://<your_username>@github.com/gregcusack/eth-brownie-bgp.git
+  
 
 ## Launching Lab
 After loading Eve, you should get a network as shown below:
@@ -220,9 +272,11 @@ After loading Eve, you should get a network as shown below:
 * Highlight all devices, right click, and then click start. Give it 5 min for everything to boot. The VPCs will start instantly, but servers will take a bit.
 * For VPCs - I haven't figured out how to make the config load automatically, but you can just run `> load config` and the VPC configuration will load with the configured IP and gateway for each device.
 * For the BGP ASes - I need to make a startup script, but until I do, only thing you need to do is run `$ vtysh -b` to load the BGP config after startup. This will also automatically enable the routing and anything else in the configuration file. After that you can join the router command prompt by using `$ vtysh` to make any changes.
-* The proxies are configured with `br0` interface and will operate without any involvement. All interfaces will load their `netplan` configuration for all interfaces.
+* The proxies are configured with `br0` interface and will operate without any involvement. All interfaces will load their `netplan` configuration for all interfaces automatically.
 * You can check interface configurations with `ip a` command in the linux box or a `sh interface brief` or a shorthand `sh int b` in FRR router config mode.
 * Occasionally a device might hang on bootup. Just right click that device in Eve, select `stop` and then `start` to reload.
+* Launch the Ganache chain - On the blockchain box command line just enter `$ ganache` to launch the chain. It will listen on port `8545`. The proxies are configured to connect to this chain and interact.
+* Proxy Boxes - Launch the Python virtual environment from the command line `$ source venv/bin/activate` and then you can start Brownie `$ brownie console`. You should see it connect to the chain. You can test by issueing an `>> accounts` command and it should return the accounts from the Ganache chain.
 
 ## Known Bugs/Issues
 * See [Eve-ng Issues](https://github.com/SmartFinn/eve-ng-integration/blob/master/README.md) for common problems and fixes.
