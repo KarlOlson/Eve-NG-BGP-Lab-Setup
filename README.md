@@ -259,7 +259,7 @@ This section covers the deployment of the ethereum local test blockchain via Gan
   ```
   
 * Clone Greg's repo of various python efforts (note: not required here and will be repeated in seperate operation readme...but I included in the base and so will include here on the lab setup instructions
-  *  `git clone https://<your_username>@github.com/gregcusack/eth-brownie-bgp.git
+  *  `git clone https://<your_username>@github.com/gregcusack/eth-brownie-bgp.git`
   
 
 ## Launching Lab
