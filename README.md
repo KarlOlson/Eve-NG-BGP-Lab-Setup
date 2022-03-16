@@ -11,7 +11,7 @@ Greg's blockchain efforts: [here](https://github.com/gregcusack/eth-blockchain-d
   * BGP_AS_50/100 Boxes: Enter `$ vtysh -b`
   * VPC Boxes: Enter `>> load config`
   * Blockchain Box: Enter `$ ganache`
-  * Proxy Boxes: Enter `$ venv/bin/activate` followed by `brownie console`. 
+  * Proxy Boxes: Enter `$source venv/bin/activate` followed by `brownie console`. 
 
 * Login info:
    * For Eve-ng VM: User: `root` Pass: `eve` and the web front-end: User: `admin` Pass: `eve`
