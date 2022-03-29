@@ -242,7 +242,7 @@ This section covers the deployment of the ethereum local test blockchain via Gan
   psudo() { sudo env PATH="$PATH" "$@"; }
   LS_COLORS=$LS_COLORS:'di=0;35:' ; export LS_COLORS
   ```
-* Configure Brownie to use remote Ganache chain on blockchain server (Note: you should be in the python virtual environment when doing this, if you are not, just run `source venv/bin/activate` to start. This would mostly apply after a reboot. Note: there are different configs per box as we are just setup with a point-to-point link for our lab to connect these boxes together rather than routing infrastructure. We are using the `development` chain for `<chain name>:
+* Configure Brownie to use remote Ganache chain on blockchain server (Note: you should be in the python virtual environment when doing this, if you are not, just run `source venv/bin/activate` to start. This would mostly apply after a reboot. Note: there are different configs per box as we are just setup with a point-to-point link for our lab to connect these boxes together rather than routing infrastructure. We are using the `development` chain for `<chain name>`:
   * For proxy 1: `(venv)$ brownie networks modify <chain name> host='http://192.168.1.2' port='8545'`
   * For proxy 2: `(venv)$ brownie networks modify <chain name> host='http://192.168.3.2' port='8545'`
  * You should now be able to test your Brownie connectivity to the remote ganache blockchain:
@@ -261,8 +261,8 @@ This section covers the deployment of the ethereum local test blockchain via Gan
 * Clone Greg's repo of various python efforts (note: not required here and will be repeated in seperate operation readme...but I included in the base and so will include here on the lab setup instructions
   *  `git clone https://<your_username>@github.com/gregcusack/eth-brownie-bgp.git`
   *  Alternatively, setup ssh to git (run within eth-brownie-bgp repo on proxies): 
- 	* 1. `vim .git/config`
-	* 2. Change `https://kolson@github.com/gregcusack/eth-brownie-bgp.git` to `git@github.com:gregcusack/eth-brownie-bgp.git`
+ 	* `vim .git/config`
+	* Change `https://kolson@github.com/gregcusack/eth-brownie-bgp.git` to `git@github.com:gregcusack/eth-brownie-bgp.git`
 
   
 
