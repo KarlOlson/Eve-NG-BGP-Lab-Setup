@@ -216,7 +216,7 @@ This section covers the deployment of the ethereum local test blockchain via Gan
 * Install Ganache on Blockchain server:
   ```
   sudo apt-get update
-  sudo apt-get install npm build-essentials python3.8-dev python3-pip
+  sudo apt-get install npm build-essential python3.8-dev python3-pip
   sudo npm install -g ganache
   sudo npm install -g npm@8.5.3
   ```
